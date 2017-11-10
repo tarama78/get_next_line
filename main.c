@@ -6,7 +6,7 @@
 /*   By: tnicolas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 10:58:58 by tnicolas          #+#    #+#             */
-/*   Updated: 2017/11/10 11:59:42 by tnicolas         ###   ########.fr       */
+/*   Updated: 2017/11/10 15:29:47 by tnicolas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ void			gnl(int fd)
 int				main(int ac, char **av)
 {
 	int			i;
-	int			fd1 = open("a", O_RDONLY);
-	int			fd2 = open("file2.txt", O_RDONLY);
+	int			fd1 = open("file1.txt", O_RDONLY);
+	// file2.txt : OK, a (empty file) : segfault
+	int			fd2 = open("a", O_RDONLY);
 	int			fd3 = open("file3.txt", O_RDONLY);
 	(void)ac;
 	(void)av;

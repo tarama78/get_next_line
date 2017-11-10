@@ -6,7 +6,7 @@
 /*   By: tnicolas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 10:53:40 by tnicolas          #+#    #+#             */
-/*   Updated: 2017/11/10 12:41:22 by tnicolas         ###   ########.fr       */
+/*   Updated: 2017/11/10 16:43:38 by tnicolas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static size_t	ft_get_fd_content(int fd, char **buf)
 
 	*buf = 0;
 	size_file = 0;
-	while ((ret_read = read(fd, tmp, sizeof(tmp) - 1)) > 0)
+	while ((ret_read = read(fd, tmp, BUFF_SIZE)) > 0)
 	{
 		tmp[ret_read] = '\0';
 		size_file += ret_read;
@@ -113,7 +113,7 @@ static int		ft_readline(t_file **files, int fd, char **line)
 		if ((*files)[f].content[i++] == '\0')
 			return (END);
 	}
-	line_act = -1;
+/*	line_act = -1;
 	while ((*files)[f].content[i + ++line_act] != '\n' &&
 			(*files)[f].content[i + line_act] != '\0')
 		;
@@ -124,7 +124,7 @@ static int		ft_readline(t_file **files, int fd, char **line)
 		(*line)[line_act] = (*files)[f].content[i + line_act];
 	(*files)[f].line++;
 	return (LINE_READ);
-}
+*/}
 
 int			get_next_line(const int fd, char **line)
 {
