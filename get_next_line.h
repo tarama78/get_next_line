@@ -6,7 +6,7 @@
 /*   By: tnicolas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 10:47:08 by tnicolas          #+#    #+#             */
-/*   Updated: 2017/11/09 20:25:42 by tnicolas         ###   ########.fr       */
+/*   Updated: 2017/11/10 10:22:50 by tnicolas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 # define GET_NEXT_LINE_H
 
 # define BUFF_SIZE 64
-# define FD 0
-# define LINE 1
+# define END 0
+# define LINE_READ 1
+# define ERROR -1
 
 typedef struct	s_file
 {

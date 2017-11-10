@@ -6,7 +6,7 @@
 /*   By: tnicolas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 10:58:58 by tnicolas          #+#    #+#             */
-/*   Updated: 2017/11/09 20:31:39 by tnicolas         ###   ########.fr       */
+/*   Updated: 2017/11/10 11:59:42 by tnicolas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,43 @@
 #include <limits.h>
 #include <string.h>
 #include <ctype.h>
+#include <fcntl.h>
 #include "get_next_line.h"
+
+void			gnl(int fd)
+{
+	char		*line;
+	
+	printf("line (fd = %d):\n", fd);
+	if (get_next_line(fd, &line) == LINE_READ)
+	{
+		printf("\t\"%s\"\n\n", line);
+		free(line);
+	}
+	else
+		printf("\tNOLINE\n");
+}
 
 int				main(int ac, char **av)
 {
 	int			i;
-	int			fd1 = 1, fd2 = 2, fd3 = 3;
-	char		*line;
+	int			fd1 = open("a", O_RDONLY);
+	int			fd2 = open("file2.txt", O_RDONLY);
+	int			fd3 = open("file3.txt", O_RDONLY);
 	(void)ac;
 	(void)av;
 	(void)i;
-	get_next_line(fd1, &line);
-	get_next_line(fd2, &line);
-	get_next_line(fd3, &line);
-	get_next_line(fd1, &line);
-	get_next_line(fd2, &line);
-	get_next_line(fd3, &line);
-	get_next_line(fd1, &line);
-	get_next_line(fd3, &line);
-	get_next_line(fd3, &line);
+	gnl(fd1);
+	gnl(fd2);
+	gnl(fd1);
+	gnl(fd3);
+	gnl(fd2);
+	gnl(fd3);
+	gnl(fd3);
+	gnl(fd3);
+	gnl(fd1);
 	return (0);
 }
+/*
+gcc -Wall -Wextra -Werror -o get_next_line.o -c get_next_line.c && gcc -Wall -Wextra -Werror -o main.o -c main.c && gcc -o a.out main.o get_next_line.o && ./a.out && rm a.out
+*/

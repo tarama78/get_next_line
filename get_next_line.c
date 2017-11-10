@@ -6,7 +6,7 @@
 /*   By: tnicolas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 10:53:40 by tnicolas          #+#    #+#             */
-/*   Updated: 2017/11/09 20:29:37 by tnicolas         ###   ########.fr       */
+/*   Updated: 2017/11/10 12:41:22 by tnicolas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <unistd.h>
 #include "get_next_line.h"
 
-#include <stdio.h>//////////////////////////////////////////////////////////////
 #include <string.h>/////////////////////////////////////////////////////////////
 
 static size_t	ft_get_fd_content(int fd, char **buf)
@@ -96,20 +95,35 @@ static void		ft_create_files(t_file **files, int nb_files, int new_fd)
 	*files = files2;
 }
 
-static void		ft_readline(t_file **files, int fd, char **line)
+static int		ft_readline(t_file **files, int fd, char **line)
 {
 	int		f;
-	char	*buf;
+	int		i;
+	int		line_act;
 
-	(void)line;
 	f = -1;
 	while ((*files)[++f].fd != fd)
 		;
-	if (!(buf = malloc(sizeof(*buf) * (BUFF_SIZE + 1))))
-		return ;
-
-	free(buf);
+	line_act = 0;
+	i = 0;
+	while (line_act < (*files)[f].line)
+	{
+		if ((*files)[f].content[i] == '\n')
+			line_act++;
+		if ((*files)[f].content[i++] == '\0')
+			return (END);
+	}
+	line_act = -1;
+	while ((*files)[f].content[i + ++line_act] != '\n' &&
+			(*files)[f].content[i + line_act] != '\0')
+		;
+	if (!(*line = (char*)(malloc(sizeof(**line) * (line_act + 1)))))
+		return (ERROR);
+	(*line)[line_act] = '\0';
+	while (--line_act >= 0)
+		(*line)[line_act] = (*files)[f].content[i + line_act];
 	(*files)[f].line++;
+	return (LINE_READ);
 }
 
 int			get_next_line(const int fd, char **line)
@@ -117,10 +131,7 @@ int			get_next_line(const int fd, char **line)
 	static t_file	*files = 0;
 	int				nb_files;
 	int				new_file;
-	int				i;
 
-	(void)line;
-	(void)i;
 	new_file = 1;
 	if (files == 0)
 		nb_files = 1;
@@ -128,13 +139,5 @@ int			get_next_line(const int fd, char **line)
 		nb_files = ft_get_nb_files(files, fd, &new_file);
 	if (new_file == 1)
 		ft_create_files(&files, nb_files, fd);
-	ft_readline(&files, fd, line);
-
-	printf("get_next_line : (fd = %d)\n", fd);
-	i = -1;
-	while (++i < nb_files)
-	{
-		printf("\tfd : %d\tline : %d\n", files[i].fd, files[i].line);
-	}
-	return (0);
+	return (ft_readline(&files, fd, line));
 }
