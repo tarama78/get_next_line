@@ -6,14 +6,14 @@
 /*   By: tnicolas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/18 10:20:18 by tnicolas          #+#    #+#             */
-/*   Updated: 2017/11/18 14:12:45 by tnicolas         ###   ########.fr       */
+/*   Updated: 2017/11/18 15:58:43 by tnicolas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# define BUFF_SIZE 64
+# define BUFF_SIZE 1
 # define END 0
 # define LINE_READ 1
 # define SUCCESS 1

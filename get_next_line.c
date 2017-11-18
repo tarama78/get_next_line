@@ -26,11 +26,9 @@ static int		ft_create_file(t_file **file, int fd, size_t *nb_file)
 		while (file[*nb_file])
 			if (file[(*nb_file)++]->fd == fd)
 			{
-				//printf("ft_create_file : pas de structure a cree\n");//
 				(*nb_file)--;
 				return (SUCCESS);
 			}
-	//printf("ft_create_file : structure a cree (nb_file = %zu)\n", *nb_file);//
 	if (!(*file = ft_realloc(*file, *nb_file * sizeof(*file),
 					(*nb_file + 2) * sizeof(*file))))
 		return (ERROR);
@@ -49,7 +47,6 @@ static int		ft_get_line(t_file **file, char **line, size_t nb_file)
 	int		size_line;
 	int		len_file;
 
-	printf("ft_get_line:\n\tstart : \"%s\"\n", file[nb_file]->line_fd);
 	len_file = ft_strlen(file[nb_file]->line_fd);
 	size_line = -1;
 	while (file[nb_file]->line_fd[++size_line] != '\n' &&
@@ -57,21 +54,14 @@ static int		ft_get_line(t_file **file, char **line, size_t nb_file)
 		;
 	if (!(*line = malloc(sizeof(**line) * (size_line + 1))))
 		return (ERROR);
-//	file[nb_file]->line_fd[size_line] = '\0';
 	ft_strncpy(*line, file[nb_file]->line_fd, size_line);
 	(*line)[size_line] = '\0';
-//	printf("\t\t%p\n\t\t%p\n", *line, file[nb_file]->line_fd);
-	printf("\tsize_line : %d\n\tstart line : \"%s\"\n", size_line, *line);
-//	if (file[nb_file]->line_fd[size_line] != '\0') //usefull ?
-//	{
-//		printf("ft_get_line:\n\tmemmove before : %s\n", file[nb_file]->line_fd);
 		ft_memmove(file[nb_file]->line_fd, file[nb_file]->line_fd + size_line + 1,
 				len_file - size_line);
-//		printf("\tmemmove after : %s\n", file[nb_file]->line_fd);
-		ft_realloc(file[nb_file]->line_fd, len_file, len_file - size_line + 1);
+		if (!(file[nb_file]->line_fd = ft_realloc(file[nb_file]->line_fd,
+						len_file, len_file - size_line + 1)))
+			return (ERROR);
 		file[nb_file]->line_fd[len_file - size_line] = '\0';
-		printf("\tend line : \"%s\"\n", *line);
-//	}
 	return (LINE_READ);
 }
 
@@ -89,7 +79,6 @@ static int		ft_read(t_file **file, char **line, size_t nb_file)
 	ret_read = 1;
 	if ((ret_read = read(file[nb_file]->fd, buf, BUFF_SIZE)) > 0)
 	{
-		//printf("ft_read:\n\tret_read : %d\n", ret_read);//
 		buf[ret_read] = '\0';
 		if (!(file[nb_file]->line_fd = ft_realloc(file[nb_file]->line_fd,
 				ft_strlen(file[nb_file]->line_fd),
@@ -102,8 +91,6 @@ static int		ft_read(t_file **file, char **line, size_t nb_file)
 		return (END);
 	else if (ret_read == 0)
 		return (ft_get_line(file, line, nb_file));
-	else if (ret_read < 0)
-		return (ERROR);
 	return (ERROR);
 }
 
@@ -112,10 +99,9 @@ int				get_next_line(const int fd, char **line)
 	static t_file	*file = NULL;
 	size_t			nb_file;
 
+	*line = NULL;
 	if (ft_create_file(&file, fd, &nb_file) == ERROR)
 		return (ERROR);
-//	printf("nb_file (fd=%d) : %zu\n", fd, nb_file);//
-	*line = NULL;
 	return (ft_read(&file, line, nb_file));
 //	return(SUCCESS);//
 }
@@ -144,7 +130,7 @@ void			gnl(int fd)
 	else if (ret == SUCCESS)
 	{
 		printf("SUCCESS :\n\tline : \"%s\"\n", line);
-//		free(line);
+		free(line);
 	}
 	else
 		printf("\tretour inconnu : %d\n", ret);
@@ -164,8 +150,14 @@ int				main(int ac, char **av)
 
 	gnl(fd1);
 	gnl(fd1);
+	gnl(fd1);
+	gnl(fd1);
 	gnl(fd2);
 	gnl(fd3);
+	gnl(fd3);
+	gnl(fd2);
+	gnl(fd2);
+	gnl(fd2);
 	gnl(fd3);
 	close(fd1);
 	close(fd2);
