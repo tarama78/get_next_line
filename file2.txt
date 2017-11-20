@@ -1,3 +1,0 @@
-f4 ligne1
-42
-file 4 ligne 3
