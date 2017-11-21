@@ -10,7 +10,8 @@
 typedef struct			s_file
 {
 	int					fd;
-	char				*line_fd;
+	char				*s;
+	struct s_file		*next;
 }						t_file;
 
 int						get_next_line(const int fd, char **line);

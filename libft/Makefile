@@ -6,7 +6,7 @@
 #    By: tnicolas <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/07 09:45:36 by tnicolas          #+#    #+#              #
-#    Updated: 2017/11/15 14:58:55 by pmilan           ###   ########.fr        #
+#    Updated: 2017/11/21 13:27:12 by tnicolas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,6 +72,7 @@ FILES = ft_strlen.c \
 		  ft_lstadd.c \
 		  ft_lstiter.c \
 		  ft_lstmap.c \
+		  ft_lstget.c \
 		  ft_realloc.c
 
 
