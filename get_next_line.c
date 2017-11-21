@@ -5,8 +5,9 @@
 #include <sys/uio.h>
 #include <unistd.h>
 
-#include <stdio.h>///
+#include <stdio.h>//dd
 
+//<d1>
 void ft_printstruct(t_file **file)
 {
 	int i = -1;
@@ -15,6 +16,7 @@ void ft_printstruct(t_file **file)
 		printf("\tfd : %d\n\t\tline : %s\n", file[i]->fd, file[i]->line_fd);
 	}
 }
+//</d1>
 
 static int		ft_fruit(t_file **file, size_t *nb_file)
 {
@@ -26,8 +28,8 @@ static int		ft_fruit(t_file **file, size_t *nb_file)
 					(*nb_file - 0) * sizeof(t_file*))))///
 		return (ERROR);
 	file[*nb_file - 1] = 0;
-//	printf("pointeur (ft_fruit) : %p\n", file[0]);
-//	printf("nb_file(ft_fruit) : %zu\n", *nb_file);
+//	printf("pointeur (ft_fruit) : %p\n", file[0]);//dd
+//	printf("nb_file(ft_fruit) : %zu\n", *nb_file);//dd
 	return (SUCCESS);
 }
 
@@ -125,7 +127,7 @@ int				get_next_line(const int fd, char **line)
 	return (ret);
 }
 
-////////////////////////////////////////////////////////////////////////////////
+//<d0>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -186,3 +188,4 @@ int				main(int ac, char **av)
 	close(fd5);
 	return (EXIT_SUCCESS);
 }
+//</d0>
