@@ -8,28 +8,43 @@
 #include <stdio.h>//dd
 
 //<d1>
-void ft_printstruct(t_file *f)
-{
-	while (f != NULL)
-	{
-		printf("=====\n\tfd : %d\n\tstr : \"%s\"\n\tnext : %p\n=====\n", f->fd, f->s, f->next);
-		f = f->next;
-	}
-}
+//void ft_printstruct(t_file *f)
+//{
+//	while (f != NULL)
+//	{
+//		printf("=====\n\tfd : %d\n\tstr : \"%s\"\n\tnext : %p\n=====\n", f->fd, f->s, f->next);
+//		f = f->next;
+//	}
+//	int		n;
+//
+//	n = -1;
+//	while ((t_file*)ft_lstget((t_list*)f, ++n))
+//	{
+//		printf("===== %d\n\tfd: %d\n\tstr: %s\n\tnext: %p\n=====\n", n,
+//				((t_file*)ft_lstget((t_list*)f, n))->fd,
+//				((t_file*)ft_lstget((t_list*)f, n))->s,
+//				((t_file*)ft_lstget((t_list*)f, n))->next);
+//	}
+//}
 //</d1>
 
 static int		ft_fruit(t_file **f, size_t n)
 {
-//	free(file[*nb_file]->line_fd);
-//	free(file[*nb_file]);
-//	while (file[++(*nb_file)])
-//		file[*nb_file - 1] = file[*nb_file];
-//	if (!(*file = (t_file*)ft_realloc(*file, (*nb_file + 1) * sizeof(t_file*),
-//					(*nb_file - 0) * sizeof(t_file*))))///
-//		return (ERROR);
-//	file[*nb_file - 1] = 0;
-//	printf("pointeur (ft_fruit) : %p\n", file[0]);//dd
-//	printf("nb_file(ft_fruit) : %zu\n", *nb_file);//dd
+	t_file		*to_del;
+
+	to_del = ((t_file*)ft_lstget((t_list*)*f, n));
+	if (n > 0)
+	{
+		((t_file*)ft_lstget((t_list*)*f, n - 1))->next =
+			((t_file*)ft_lstget((t_list*)*f, n + 1));
+	}
+	else
+	{
+		to_del = *f;
+		*f = (*f)->next;
+	}
+	free(to_del->s);
+	free(to_del);
 	return (SUCCESS);
 }
 
@@ -38,85 +53,76 @@ static int		ft_create_struct(t_file **f, int fd, size_t *n)
 	t_file		*new;
 
 	*n = 0;
+	while (((t_file*)ft_lstget((t_list*)*f, *n)))
+	{
+		if (((t_file*)ft_lstget((t_list*)*f, *n))->fd == fd)
+			return (SUCCESS);
+		(*n)++;
+	}
+	*n = 0;
 	if (!(new = malloc(sizeof(t_file))))
 		return (ERROR);
 	new->fd = fd;
 	if (!(new->s = malloc(sizeof(char))))
 		return (ERROR);
+	new->s[0] = '\0';
 	new->next = *f;
 	*f = new;
-
-//	if (*file != NULL)
-//		while (file[*nb_file])
-//			if (file[(*nb_file)++]->fd == fd)
-//			{
-//				(*nb_file)--;
-//				return (SUCCESS);
-//			}
-//	if (!(*file = (t_file*)ft_realloc(*file, *nb_file * sizeof(t_file*),
-//					(*nb_file + 2) * sizeof(t_file*))))//////////////////////////
-//		return (ERROR);
-//	if (!(file[*nb_file] = (t_file*)malloc(sizeof(**file))))
-//		return (ERROR);
-//	file[*nb_file]->fd = fd;
-//	if (!(file[*nb_file]->line_fd = malloc(sizeof(char))))
-//		return (ERROR);
-//	file[*nb_file]->line_fd[0] = '\0';
-//	file[*nb_file + 1] = 0;
 	return (SUCCESS);
 }
 
-//static int		ft_get_line(t_file **file, char **line, size_t nb_file)
-//{
-//	size_t	size_line;
-//	size_t	len_file;
-//
-//	len_file = ft_strlen(file[nb_file]->line_fd);
-//	size_line = 0;
-//	while (file[nb_file]->line_fd[size_line] != '\n' &&
-//			file[nb_file]->line_fd[size_line] != '\0')
-//		size_line++;
-//	if (!(*line = malloc(sizeof(**line) * (size_line + 1))))
-//		return (ERROR);
-//	ft_strncpy(*line, file[nb_file]->line_fd, size_line);
-//	(*line)[size_line] = '\0';
-//	ft_memmove(file[nb_file]->line_fd, file[nb_file]->line_fd + size_line + 1,
-//			len_file - size_line);
-//	if (!(file[nb_file]->line_fd = ft_realloc(file[nb_file]->line_fd,
-//					len_file, len_file - size_line)))
-//		return (ERROR);
-//	file[nb_file]->line_fd[len_file - size_line - 1] = '\0';
-//	return (LINE_READ);
-//}
+static int		ft_get_line(t_file *tmp, char **line, size_t n)
+{
+	size_t	size_line;
+	size_t	len_file;
 
-//static int		ft_read(t_file **file, char **line, size_t nb_file)
-//{
-//	int		i;
-//	char	buf[BUFF_SIZE + 1];
-//	int		ret_read;
-//
-//	i = 0;
-//	while (file[nb_file]->line_fd[i] != '\n' && file[nb_file]->line_fd[i])
-//		i++;
-//	if (file[nb_file]->line_fd[i] == '\n')
-//		return (ft_get_line(file, line, nb_file));
-//	ret_read = 1;
-//	if ((ret_read = read(file[nb_file]->fd, buf, BUFF_SIZE)) > 0)
-//	{
-//		buf[ret_read] = '\0';
-//		if (!(file[nb_file]->line_fd = ft_realloc(file[nb_file]->line_fd,
-//						ft_strlen(file[nb_file]->line_fd) + 1,
-//						ft_strlen(file[nb_file]->line_fd) + ret_read + 1)))
-//			return (ERROR);
-//		ft_strncat(file[nb_file]->line_fd, buf, ret_read);
-//		return (ft_read(file, line, nb_file));
-//	}
-//	else if (ret_read == 0 && ft_strlen(file[nb_file]->line_fd) == 0)
-//		return (END);
-//	else if (ret_read == 0)
-//		return (ft_get_line(file, line, nb_file));
-//	return (ERROR);
-//}
+	(void)n;//dd
+	len_file = ft_strlen(tmp->s);
+	size_line = 0;
+	while (tmp->s[size_line] != '\n' && tmp->s[size_line] != '\0')
+		size_line++;
+//	printf("ft_get_line :\n\t%zu\n\t%zu\n\ttmp->s(before) : |%s|\n", len_file, size_line, tmp->s);//dd
+	if (!(*line = malloc(sizeof(**line) * (size_line + 1))))
+		return (ERROR);
+	ft_strncpy(*line, tmp->s, size_line);
+	(*line)[size_line] = '\0';
+	ft_memmove(tmp->s, tmp->s + size_line + 1, len_file - size_line);
+	if (!(tmp->s = ft_realloc(tmp->s, len_file + 1, len_file - size_line + 1)))
+		return (ERROR);
+	tmp->s[len_file - size_line - 1] = '\0';
+//	printf("\ttmp->s(after) : |%s|\n", tmp->s);//dd
+	return (LINE_READ);
+}
+
+static int		ft_read(t_file *f, char **line, size_t n)
+{
+	int		i;
+	t_file	*tmp;
+	char	buf[BUFF_SIZE + 1];
+	int		ret_read;
+
+	i = 0;
+	tmp = ((t_file*)ft_lstget((t_list*)f, n));
+	while (tmp->s[i] != '\n' && tmp->s[i])
+		i++;
+	if (tmp->s[i] == '\n')
+		return (ft_get_line(tmp, line, n));
+	ret_read = 1;
+	if ((ret_read = read(tmp->fd, buf, BUFF_SIZE)) > 0)
+	{
+		buf[ret_read] = '\0';
+		if (!(tmp->s = ft_realloc(tmp->s, ft_strlen(tmp->s) + 1,
+						ft_strlen(tmp->s) + ret_read + 1)))
+			return (ERROR);
+		ft_strncat(tmp->s, buf, ret_read);
+		return (ft_read(f, line, n));
+	}
+	else if (ret_read == 0 && ft_strlen(tmp->s) == 0)
+		return (END);
+	else if (ret_read == 0)
+		return (ft_get_line(tmp, line, n));
+	return (ERROR);
+}
 
 int				get_next_line(const int fd, char **line)
 {
@@ -128,76 +134,74 @@ int				get_next_line(const int fd, char **line)
 	ret = 0;
 	if (ft_create_struct(&f, fd, &n) == ERROR)
 		return (ERROR);
-//	ret = ft_read(&file, line, nb_file);
-//	ft_printstruct(f);
+//	printf("n : %zu\n", n);//dd
+	ret = ft_read(f, line, n);
 	if (ret == END)
 		if (ft_fruit(&f, n) == ERROR)
 			return (ERROR);
-//	ft_printstruct(&file);
+//	ft_printstruct(f);//dd
 	return (ret);
 }
 
 //<d0>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <limits.h>
-#include <string.h>
-#include <ctype.h>
-#include <fcntl.h>
-
-void			gnl(int fd)
-{
-	char	*line;
-	int		ret;
-
-	line = NULL;
-	printf("----file %d-------\n", fd);
-	ret = get_next_line(fd, &line);
-	if (ret == ERROR)
-		printf("ERROR\n");
-	else if (ret == END)
-		printf("EOF\n");
-	else if (ret == SUCCESS)
-	{
-		printf("SUCCESS :\n\tline : \"%s\"\n", line);
-		free(line);
-	}
-	else
-		printf("\tretour inconnu : %d\n", ret);
-	printf("-----------------\n\n");
-}
-
-int				main(int ac, char **av)
-{
-	int			i;
-
-	(void)ac;
-	(void)av;
-	(void)i;
-	int		fd3 = open("f/f3.txt", O_RDONLY);
-	int		fd4 = open("f/f4.txt", O_RDONLY);
-	int		fd5 = open("f/f5.txt", O_RDONLY);
-	int		fd6 = open("f/f6.txt", O_RDONLY);
-
-	gnl(fd6);
-	gnl(fd5);
-	gnl(fd4);
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <unistd.h>
+//#include <limits.h>
+//#include <string.h>
+//#include <ctype.h>
+//#include <fcntl.h>
+//
+//void			gnl(int fd)
+//{
+//	char	*line;
+//	int		ret;
+//
+//	line = NULL;
+//	printf("----file %d-------\n", fd);
+//	ret = get_next_line(fd, &line);
+//	if (ret == ERROR)
+//		printf("ERROR\n");
+//	else if (ret == END)
+//		printf("EOF\n");
+//	else if (ret == SUCCESS)
+//	{
+//		printf("SUCCESS :\n\tline : \"%s\"\n", line);
+//		free(line);
+//	}
+//	else
+//		printf("\tretour inconnu : %d\n", ret);
+//	printf("-----------------\n\n");
+//}
+//
+//int				main(int ac, char **av)
+//{
+//	int			i;
+//
+//	(void)ac;
+//	(void)av;
+//	(void)i;
+//	int		fd3 = open("f/f3.txt", O_RDONLY);
+//	int		fd4 = open("f/f4.txt", O_RDONLY);
+//	int		fd5 = open("f/f5.txt", O_RDONLY);
+//	int		fd6 = open("f/f6.txt", O_RDONLY);
+//
+//	gnl(fd3);
+//	gnl(fd4);
+//	gnl(fd3);
+//	gnl(fd4);
+//	gnl(fd5);
+//	gnl(fd5);
+//	gnl(fd3);
+//	gnl(fd3);
+//	gnl(fd4);
+//	gnl(fd5);
+//	gnl(fd5);
 //	gnl(fd6);
-//	gnl(fd3);
-//	gnl(fd3);
-//	gnl(fd3);
-//	gnl(fd4);
-//	gnl(fd5);
-//	gnl(fd5);
-//	gnl(fd4);
-//	gnl(fd3);
-//	gnl(fd4);
-//	gnl(fd4);
-//	gnl(fd5);
-	close(fd3);
-	close(fd4);
-	close(fd5);
-	return (EXIT_SUCCESS);
-}
+//	close(fd3);
+//	close(fd4);
+//	close(fd5);
+//	close(fd6);
+//	return (EXIT_SUCCESS);
+//}
 //</d0>

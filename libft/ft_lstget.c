@@ -14,7 +14,7 @@
 
 t_list		*ft_lstget(t_list *lst, int n)
 {
-	while (--n > 0)
+	while (--n >= 0)
 	{
 		if (lst == NULL)
 			return (NULL);
