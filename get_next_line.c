@@ -5,30 +5,7 @@
 #include <sys/uio.h>
 #include <unistd.h>
 
-#include <stdio.h>//dd
-
-//<d1>
-//void ft_printstruct(t_file *f)
-//{
-//	while (f != NULL)
-//	{
-//		printf("=====\n\tfd : %d\n\tstr : \"%s\"\n\tnext : %p\n=====\n", f->fd, f->s, f->next);
-//		f = f->next;
-//	}
-//	int		n;
-//
-//	n = -1;
-//	while ((t_file*)ft_lstget((t_list*)f, ++n))
-//	{
-//		printf("===== %d\n\tfd: %d\n\tstr: %s\n\tnext: %p\n=====\n", n,
-//				((t_file*)ft_lstget((t_list*)f, n))->fd,
-//				((t_file*)ft_lstget((t_list*)f, n))->s,
-//				((t_file*)ft_lstget((t_list*)f, n))->next);
-//	}
-//}
-//</d1>
-
-static int		ft_fruit(t_file **f, size_t n)//d1
+static int		ft_fruit(t_file **f, size_t n)
 {
 	t_file		*to_del;
 
@@ -71,12 +48,11 @@ static int		ft_create_struct(t_file **f, int fd, size_t *n)
 	return (SUCCESS);
 }
 
-static int		ft_get_line(t_file *tmp, char **line, size_t n)
+static int		ft_get_line(t_file *tmp, char **line)
 {
 	size_t	size_line;
 	size_t	len_file;
 
-	(void)n;///
 	len_file = ft_strlen(tmp->s);
 	size_line = 0;
 	while (tmp->s[size_line] != '\n' && tmp->s[size_line] != '\r' &&
@@ -105,7 +81,7 @@ static int		ft_read(t_file *f, char **line, size_t n)
 	while (tmp->s[i] != '\n' && tmp->s[i] != '\r' && tmp->s[i])
 		i++;
 	if (tmp->s[i] == '\n' || tmp->s[i] == '\r')
-		return (ft_get_line(tmp, line, n));
+		return (ft_get_line(tmp, line));
 	ret_read = 1;
 	if ((ret_read = read(tmp->fd, buf, BUFF_SIZE)) > 0)
 	{
@@ -119,7 +95,7 @@ static int		ft_read(t_file *f, char **line, size_t n)
 	else if (ret_read == 0 && ft_strlen(tmp->s) == 0)
 		return (END);
 	else if (ret_read == 0)
-		return (ft_get_line(tmp, line, n));
+		return (ft_get_line(tmp, line));
 	return (ERROR);
 }
 
