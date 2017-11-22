@@ -28,7 +28,7 @@
 //}
 //</d1>
 
-static int		ft_fruit(t_file **f, size_t n)
+static int		ft_fruit(t_file **f, size_t n)//d1
 {
 	t_file		*to_del;
 
@@ -76,13 +76,12 @@ static int		ft_get_line(t_file *tmp, char **line, size_t n)
 	size_t	size_line;
 	size_t	len_file;
 
-	(void)n;//dd
+	(void)n;///
 	len_file = ft_strlen(tmp->s);
 	size_line = 0;
 	while (tmp->s[size_line] != '\n' && tmp->s[size_line] != '\r' &&
 			tmp->s[size_line] != '\0')
 		size_line++;
-//	printf("ft_get_line :\n\t%zu\n\t%zu\n\ttmp->s(before) : |%s|\n", len_file, size_line, tmp->s);//dd
 	if (!(*line = malloc(sizeof(**line) * (size_line + 1))))
 		return (ERROR);
 	ft_strncpy(*line, tmp->s, size_line);
@@ -91,7 +90,6 @@ static int		ft_get_line(t_file *tmp, char **line, size_t n)
 	if (!(tmp->s = ft_realloc(tmp->s, len_file + 1, len_file - size_line + 1)))
 		return (ERROR);
 	tmp->s[len_file - size_line] = '\0';
-//	printf("\ttmp->s(after) : |%s|\n", tmp->s);//dd
 	return (LINE_READ);
 }
 
@@ -131,15 +129,15 @@ int				get_next_line(const int fd, char **line)
 	size_t			n;
 	int				ret;
 
+	if (fd < 0 || line == NULL)
+		return (ERROR);
 	*line = NULL;
 	ret = 0;
 	if (ft_create_struct(&f, fd, &n) == ERROR)
 		return (ERROR);
-//	printf("n : %zu\n", n);//dd
 	ret = ft_read(f, line, n);
 	if (ret == END)
 		if (ft_fruit(&f, n) == ERROR)
 			return (ERROR);
-//	ft_printstruct(f);//dd
 	return (ret);
 }
