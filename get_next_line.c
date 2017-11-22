@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tnicolas <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/22 13:54:25 by tnicolas          #+#    #+#             */
+/*   Updated: 2017/11/22 13:55:28 by tnicolas         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 #include "libft/libft.h"
 #include <stdlib.h>
@@ -82,7 +94,6 @@ static int		ft_read(t_file *f, char **line, size_t n)
 		i++;
 	if (tmp->s[i] == '\n' || tmp->s[i] == '\r')
 		return (ft_get_line(tmp, line));
-	ret_read = 1;
 	if ((ret_read = read(tmp->fd, buf, BUFF_SIZE)) > 0)
 	{
 		buf[ret_read] = '\0';
